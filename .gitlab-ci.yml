@@ -1,0 +1,45 @@
+stages:
+  - before
+  - build  
+  - deploy
+  - test
+
+before-job:
+  tags: 
+    - ansible-k8s
+  stage: before
+  script:
+    - echo "b2efore-job"
+    - cd docker-build  
+      #    - sudo ansible-playbook -i hosts.ini del-deploy.yml
+      #- docker rmi registry.my/image:test
+      #- curl -u user:1234qwer -s -X DELETE http://172.19.0.2:5000/v2/image/manifests/sha256:80a93e925273326c3188270c10af592f2d7df05610fc0422c9b394725cff1131
+      #- docker login -u user -p 1234qwer registry.my
+
+build-job:
+  tags:
+    - ansible-k8s      
+  stage: build
+  script:
+      - echo "build-job1"
+      - cd docker-build
+      - docker build -t registry.my:5000/image:test1 .
+      - docker push registry.my:5000/image:test1
+
+deploy-job:
+  tags:
+    - ansible-k8s
+  stage: deploy
+  script:
+    - echo "deploy-job444"
+    - ansible-playbook -u root -i hosts.ini docker-pull.yml
+    - ansible-playbook -u root -i hosts.ini test.yml
+
+test-job:
+  tags:
+    - ansible-k8s      
+  stage: test
+  script:
+    - echo "test-job"
+    - curl 192.168.1.250
+
