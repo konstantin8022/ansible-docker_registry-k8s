@@ -26,7 +26,7 @@
                 project: local-web   # Service will look for those PODS Labels!!!
             spec:
               imagePullSecrets:
-                - name: regcred  
+                - name: regcred      
               containers:
                 - name : my-web
                   image: registry.my:5000/image:test1
@@ -54,12 +54,12 @@
     shell: kubectl apply -f my-web.yaml
 
   - name: Create externalIPs
+    #shell: kubectl patch svc my-web-service -p '{"spec":{"externalIPs":["{{ hostvars['highavailability'].ansible_host }}"]}}'
     shell: kubectl patch svc my-web-service -p '{"spec":{"externalIPs":["192.168.1.250"]}}'
-    #shell: kubectl patch svc my-web-service -p '{"spec":{"externalIPs":["{{ hostvars['master01'].ansible_host }}"]}}'
 
-  - name: The pause for 20 seconds to pod up
+  - name: The pause for 10 seconds to pod up
     pause:
-      seconds: 20
+      seconds: 10
 
 #  - name: Test service my-web
 #    shell: curl {{ hostvars['master01'].ansible_host }}

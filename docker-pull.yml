@@ -9,8 +9,8 @@
     shell: docker login -u user -p l45vegas registry.my:5000
     ignore_errors: true
 
-    #- name: Docker rmi
-    #  shell: docker rmi registry.my:5000/image:test1
+  - name: Docker rmi
+    shell: docker rmi registry.my:5000/image:test1
 
   - name: Docker pull
     shell: docker pull registry.my:5000/image:test1
